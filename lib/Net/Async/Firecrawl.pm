@@ -11,7 +11,7 @@ use Net::Async::HTTP ();
 use Future ();
 use Future::Utils qw( repeat );
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 sub _init {
   my ( $self, $args ) = @_;
