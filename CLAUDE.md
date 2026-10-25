@@ -17,7 +17,8 @@ are not repeated here.
 ## Delegation
 
 Delegate behavior-relevant code to the right agent instead of touching it yourself —
-the principle and the lane boundaries are in
+the principle is the shared rule `getty-agent-delegation` (skilletor bundle
+`getty-cpan-dist@getty`); the lane boundaries are in
 `.claude/rules/net-async-firecrawl-rules.md`.
 
 | Task | Agent |
