@@ -1,0 +1,36 @@
+---
+claimed_at: 2026-10-25T05:48:07Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:48:07Z
+created: 2026-10-21T02:16:37Z
+id: 6
+priority: medium
+started: 2026-10-25T05:42:41Z
+status: done
+tags:
+- docs
+- example
+title: Das Beispiel ex/live_handyintelligence.pl ist auf eine interne Adresse festgenagelt
+updated: 2026-10-25T05:48:07Z
+---
+
+ex/live_handyintelligence.pl nagelt eine interne Adresse fest:
+
+  base_url => 'http://10.5.10.1:3002',
+
+und einen einzelnen Zielhost (handyintelligence.com). Das Beispiel läuft damit nur im
+eigenen Netz, und es ist nirgends erwähnt — weder im README noch in der POD des
+Moduls. Wer die Distribution ausprobiert, findet es nur, wenn er das Verzeichnis
+öffnet.
+
+Erledigt, wenn:
+
+- die Adresse aus der Umgebung oder aus Argumenten kommt (FIRECRAWL_BASE_URL und
+  FIRECRAWL_API_KEY sind bereits die Konvention des Geschwisters),
+- das Beispiel im README oder in der Modul-POD genannt ist, mit dem Hinweis, dass es
+  eine laufende Firecrawl-Instanz braucht,
+- das Beispiel ohne gesetzte Adresse mit einer klaren Meldung abbricht, statt in einen
+  Timeout zu laufen.
+
+Commit e957b50. Also found: Skill net-async-firecrawl-core (Traps/Tests/Constructor) beschreibt noch den alten Zustand (Konstruktor-Attribute, no-id-String, Future::Utils als eigene Dist, 5 Dateien/23 Tests) und CLAUDE.md 'State of the code' ebenso; nicht angefasst. Dateiname ex/live_handyintelligence.pl bleibt trotz neutralem Ziel.
