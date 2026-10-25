@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+ - extract_and_wait and agent_and_wait now fail a job that starts without an id
+   with a WWW::Firecrawl::Error of type api and the failure spec 'firecrawl',
+   like the other flow helpers, instead of a bare string.
  - The runtime dependencies now list every module the code loads, including
    Future::Utils for the poll loops, so an installation from the cpanfile is
    complete.

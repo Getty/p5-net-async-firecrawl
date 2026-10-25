@@ -321,7 +321,10 @@ sub extract_and_wait {
   my $interval = delete $args{poll_interval};
   $self->extract(%args)->then(sub {
     my ( $job ) = @_;
-    my $id = $job->{id} or return Future->fail("extract returned no id");
+    my $id = $job->{id} or return Future->fail(
+      WWW::Firecrawl::Error->new( type => 'api', message => "extract returned no id" ),
+      'firecrawl',
+    );
     $self->_poll_until_done(
       status   => sub { $self->extract_status($id) },
       interval => $interval,
@@ -335,7 +338,10 @@ sub agent_and_wait {
   my $interval = delete $args{poll_interval};
   $self->agent(%args)->then(sub {
     my ( $job ) = @_;
-    my $id = $job->{id} or return Future->fail("agent returned no id");
+    my $id = $job->{id} or return Future->fail(
+      WWW::Firecrawl::Error->new( type => 'api', message => "agent returned no id" ),
+      'firecrawl',
+    );
     $self->_poll_until_done(
       status   => sub { $self->agent_status($id) },
       interval => $interval,
@@ -492,7 +498,7 @@ Five error types (same model as L<WWW::Firecrawl>):
 
 =item * C<transport> — Firecrawl unreachable. Retried automatically up to C<max_attempts>.
 
-=item * C<api> — Firecrawl returned non-2xx or C<< {success: false} >>. Retried only for C<retry_statuses> (default 429/502/503/504).
+=item * C<api> — Firecrawl returned non-2xx or C<< {success: false} >>. A flow helper whose started job carries no id fails the same way. Retried only for C<retry_statuses> (default 429/502/503/504).
 
 =item * C<job> — A flow reported C<< status: failed >> or C<< status: cancelled >>. Never retried — always propagates as Future fail.
 
