@@ -1,0 +1,36 @@
+---
+claimed_at: 2026-10-25T05:47:51Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:47:51Z
+created: 2026-10-21T02:16:33Z
+id: 3
+priority: high
+started: 2026-10-25T05:42:29Z
+status: done
+tags:
+- build
+- ci
+title: 'Die Distribution lässt sich nicht bauen: kein LICENSE, keine CI'
+updated: 2026-10-25T05:47:51Z
+---
+
+dzil build bricht aktuell ab:
+
+  [@Author::GETTY/LicenseFile] no LICENSE in the distribution: run 'dzil genlicense' and commit the file
+
+Das Paket-Plugin sammelt über Git::GatherDir nur versionierte Dateien — die LICENSE muss
+also im Repo stehen, ein zur Bauzeit erzeugtes File reicht nicht. Dieselbe Prüfung läuft
+über dzil test und über die CI. Ein zweiter Teil fehlt komplett: es gibt kein
+.github/workflows/ci.yml, die Tests laufen nur lokal.
+
+Erledigt, wenn:
+
+- LICENSE erzeugt (dzil genlicense) und nach Pfad (git add LICENSE) committet ist,
+- dzil build ohne Fehler durchläuft,
+- .github/workflows/ci.yml existiert und die geteilte Composite-Action nutzt:
+  Getty/p5-dist-zilla-pluginbundle-author-getty/.github/actions/dzil-test@main
+  (Muster: p5-airlock/.github/workflows/ci.yml),
+- der Workflow die reine Perl-Teststrecke fährt — kein Docker, kein Netzwerk.
+
+Commit 9db1ffb. dzil build läuft durch (0.002). Kein Changes-Eintrag (kein sichtbarer Verhalten). CI nicht auf GitHub gelaufen (kein Push).
