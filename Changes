@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+ - The live example takes the Firecrawl address from FIRECRAWL_BASE_URL and the
+   target site from its argument, stops with a clear message when no address
+   is set, and is described in the README and the module documentation.
  - extract_and_wait and agent_and_wait now fail a job that starts without an id
    with a WWW::Firecrawl::Error of type api and the failure spec 'firecrawl',
    like the other flow helpers, instead of a bare string.

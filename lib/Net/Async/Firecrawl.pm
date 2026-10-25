@@ -661,6 +661,14 @@ this notifier).
 Read/write accessor for the default poll interval (seconds) used by flow
 helpers.
 
+=head1 EXAMPLE
+
+C<ex/live_handyintelligence.pl> in the distribution runs a scrape, a map and a
+crawl against a live Firecrawl instance, so it needs one running. It reads the
+server from C<FIRECRAWL_BASE_URL> (and C<FIRECRAWL_API_KEY>, optional for
+self-hosted) and takes the target site as its first argument; without
+C<FIRECRAWL_BASE_URL> it stops with a message.
+
 =seealso
 
 L<WWW::Firecrawl>, L<IO::Async>, L<Net::Async::HTTP>, L<Future>,

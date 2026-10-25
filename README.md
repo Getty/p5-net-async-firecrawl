@@ -97,6 +97,18 @@ $fc->agent(...)           $fc->credit_usage
 | `firecrawl` | auto | Pre-built `WWW::Firecrawl` instance instead of the forwarded keys; combining both croaks |
 | `http` | auto | Pre-built `Net::Async::HTTP` instance |
 
+## Live Example
+
+`ex/live_handyintelligence.pl` scrapes, maps and crawls a site against a real
+Firecrawl instance, so it needs one running:
+
+```
+FIRECRAWL_BASE_URL=http://localhost:3002 perl -Ilib ex/live_handyintelligence.pl [URL]
+```
+
+`FIRECRAWL_API_KEY` is optional for self-hosted. Without `FIRECRAWL_BASE_URL`
+the script stops with a message.
+
 ## See Also
 
 - [WWW::Firecrawl](https://metacpan.org/pod/WWW::Firecrawl) — sync client (LWP-based)
