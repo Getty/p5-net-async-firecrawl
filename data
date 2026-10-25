@@ -1,0 +1,37 @@
+---
+claimed_at: 2026-10-25T05:47:46Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:47:46Z
+created: 2026-10-21T02:16:32Z
+id: 2
+priority: high
+started: 2026-10-25T05:42:24Z
+status: done
+tags:
+- build
+- deps
+title: Future::Utils wird benutzt, steht aber nicht im cpanfile
+updated: 2026-10-25T05:47:46Z
+---
+
+lib/Net/Async/Firecrawl.pm Zeile 12: use Future::Utils qw( repeat );
+
+Future::Utils ist eine eigene Distribution (Future-Utils) und steht nicht im cpanfile.
+Der cpanfile deklariert WWW::Firecrawl, IO::Async, Net::Async::HTTP und Future — die
+Poll-Schleifen (_poll_until_done, _collect_pages) laufen ohne Future::Utils nicht.
+
+Damit ist die Installation für jeden unvollständig, der die Abhängigkeiten aus dem
+cpanfile bezieht: die Distribution bricht beim Laden ab, nicht erst im Poll.
+
+Erledigt, wenn:
+
+- Future::Utils mit Mindestversion im cpanfile steht (Runtime, nicht Test),
+- die deklarierte Version dem entspricht, was der Code braucht (repeat aus
+  Future::Utils),
+- die Abhängigkeitsliste des cpanfiles die tatsächlich geladenen Module abdeckt — auch
+  das Geschwister WWW::Firecrawl muss deklariert sein,
+- ein Changes-Eintrag unter {{$NEXT}} die reparierte Installation nennt, wenn die
+  Version angehoben wird.
+
+Commit b508002. Hinweis: Future::Utils liegt im Dist Future (nicht eigene Distribution wie die Karte schreibt), 'Future 0.50' deckte es also schon ab; jetzt trotzdem explizit mit 0.50 deklariert, ebenso WWW::Firecrawl::Error und Test-Deps HTTP::Response/JSON::MaybeXS. Version nicht angehoben.
