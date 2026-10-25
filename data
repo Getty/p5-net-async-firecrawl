@@ -1,0 +1,39 @@
+---
+claimed_at: 2026-10-25T05:48:01Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:48:01Z
+created: 2026-10-21T02:16:35Z
+id: 5
+priority: medium
+started: 2026-10-25T05:42:37Z
+status: done
+tags:
+- test
+- coverage
+title: 'Testlücken: configure_unknown, do_request-Wächter, agent_and_wait und der
+  Pfad ohne Job-ID'
+updated: 2026-10-25T05:48:01Z
+---
+
+Nicht abgedeckt sind bisher:
+
+- configure_unknown: die Fehlermeldung "Unknown configuration keys: ..." wird nirgends
+  geprüft, obwohl sie der erste Kontakt mit einem Tippfehler in den Parametern ist,
+- der Wächter in do_request ("do_request requires HTTP::Request") — der Pfad, an dem
+  ein Aufrufer einen Builder falsch benutzt,
+- agent_and_wait: der Agent-Pfad hat keinen Test; extract_and_wait ist nur über den
+  Fehlerfall status=cancelled abgedeckt, nicht über den Erfolgsfall,
+- der Zweig "Job ohne id" in crawl_and_collect, batch_scrape_and_wait,
+  extract_and_wait und agent_and_wait,
+- die Retry-Policy in Abhängigkeit vom max_attempts des Geschwisters: die Tests nutzen
+  nur den Default.
+
+Erledigt, wenn:
+
+- für jeden der genannten Pfade ein Test existiert, der bei einer Änderung an der
+  Stelle rot wird,
+- die Tests ohne Netz auskommen (das Skript-Muster aus t/10-flows.t genügt),
+- die Testsuite weiterhin in einem Lauf grün ist.
+
+Commit cabe861 (k4+k5 gemeinsam). Rot gegen altes lib: no-id von extract/agent (nackter String). Mutationen geprüft: do_request-Wächter, max_attempts-Vergleich, configure_unknown-Text, agent_status->extract_status machen die Suite rot. 38 Tests offline grün.
