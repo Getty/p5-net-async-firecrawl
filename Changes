@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+ - The runtime dependencies now list every module the code loads, including
+   Future::Utils for the poll loops, so an installation from the cpanfile is
+   complete.
  - The constructor now accepts the retry and classification settings the
    documentation always listed (max_attempts, retry_backoff, retry_statuses,
    on_retry, is_failure, failure_codes, strict) and hands them to
