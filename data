@@ -1,0 +1,37 @@
+---
+claimed_at: 2026-10-25T05:47:56Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:47:56Z
+created: 2026-10-21T02:16:34Z
+id: 4
+priority: medium
+started: 2026-10-25T05:42:33Z
+status: done
+tags:
+- bug
+- api
+title: extract_and_wait und agent_and_wait scheitern mit einem nackten String
+updated: 2026-10-25T05:47:56Z
+---
+
+extract_and_wait und agent_and_wait scheitern mit einem nackten String, wenn der
+gestartete Job keine id liefert:
+
+  return Future->fail("extract returned no id");
+
+crawl_and_collect und batch_scrape_and_wait bauen an derselben Stelle ein
+WWW::Firecrawl::Error->new(type => 'api', ...). Das POD verspricht für jeden
+Fehlerpfad Future->fail($error, 'firecrawl', $attempt?) mit einem
+WWW::Firecrawl::Error; die README zeigt das Auswerten über $err->is_transport.
+Mit einem String bricht das Auswerten mit "Can't call method on string" ab, und die
+Failure-Spec ('firecrawl') fehlt ebenfalls.
+
+Erledigt, wenn:
+
+- beide Helfer ein WWW::Firecrawl::Error mit type 'api' liefern,
+- die Failure-Spec 'firecrawl' mitgeliefert wird,
+- ein Test den Pfad ohne Job-ID abdeckt und den Fehlertyp festnagelt,
+- das POD den Vertrag weiterhin so beschreibt, wie der Code ihn hält.
+
+Commit cabe861 (k4+k5 gemeinsam). Rot gegen altes lib: no-id von extract/agent (nackter String). Mutationen geprüft: do_request-Wächter, max_attempts-Vergleich, configure_unknown-Text, agent_status->extract_status machen die Suite rot. 38 Tests offline grün.
