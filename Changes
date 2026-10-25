@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+ - The constructor now accepts the retry and classification settings the
+   documentation always listed (max_attempts, retry_backoff, retry_statuses,
+   on_retry, is_failure, failure_codes, strict) and hands them to
+   WWW::Firecrawl instead of croaking on them. Combining them with a
+   prebuilt firecrawl instance croaks.
+
 0.001     2026-04-18 03:35:07Z
 
  - Initial release

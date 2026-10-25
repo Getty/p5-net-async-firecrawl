@@ -13,26 +13,35 @@ use Future::Utils qw( repeat );
 
 our $VERSION = '0.002';
 
+# Constructor keys handed to WWW::Firecrawl when no prebuilt instance is given.
+my @FIRECRAWL_KEYS = qw(
+  base_url api_key api_version
+  max_attempts retry_backoff retry_statuses on_retry
+  is_failure failure_codes strict
+);
+
 sub _init {
   my ( $self, $args ) = @_;
   $self->SUPER::_init($args);
-  $self->{firecrawl} ||= WWW::Firecrawl->new(
-    ( exists $args->{base_url}    ? ( base_url    => delete $args->{base_url} )    : () ),
-    ( exists $args->{api_key}     ? ( api_key     => delete $args->{api_key} )     : () ),
-    ( exists $args->{api_version} ? ( api_version => delete $args->{api_version} ) : () ),
-  );
+  my %sibling = map { $_ => delete $args->{$_} } grep { exists $args->{$_} } @FIRECRAWL_KEYS;
+  if ( exists $args->{firecrawl} ) {
+    croak "Net::Async::Firecrawl: 'firecrawl' cannot be combined with "
+      . join( ', ', sort keys %sibling ) . " - configure the instance itself"
+      if %sibling;
+    $self->{firecrawl} = delete $args->{firecrawl};
+  }
+  else {
+    $self->{firecrawl} = WWW::Firecrawl->new(%sibling);
+  }
   $self->{poll_interval} = exists $args->{poll_interval} ? delete $args->{poll_interval} : 3;
   $self->{http} = delete $args->{http};
-  $self->{firecrawl} = delete $args->{firecrawl} if exists $args->{firecrawl};
   $self->{delay_sub} = delete $args->{delay_sub};
   return;
 }
 
 sub configure_unknown {
   my ( $self, %args ) = @_;
-  for my $k (qw( base_url api_key api_version poll_interval firecrawl http delay_sub )) {
-    delete $args{$k};
-  }
+  delete @args{ @FIRECRAWL_KEYS, qw( poll_interval firecrawl http delay_sub ) };
   return unless %args;
   croak "Unknown configuration keys: ".join(',', sort keys %args);
 }
@@ -452,7 +461,11 @@ underlying L<WWW::Firecrawl>.
 
 =item * C<base_url>, C<api_key>, C<api_version> — forwarded to L<WWW::Firecrawl>.
 
-=item * C<firecrawl> — pass a pre-built L<WWW::Firecrawl> instance (overrides the above three).
+=item * C<max_attempts>, C<retry_backoff>, C<retry_statuses>, C<on_retry> — retry policy, forwarded to L<WWW::Firecrawl>.
+
+=item * C<is_failure>, C<failure_codes>, C<strict> — classification policy, forwarded to L<WWW::Firecrawl>.
+
+=item * C<firecrawl> — pass a pre-built L<WWW::Firecrawl> instance instead of the forwarded keys above. Combining it with any of them croaks.
 
 =item * C<http> — pass a pre-built L<Net::Async::HTTP> (otherwise one is created and parented to this notifier).
 
@@ -462,11 +475,10 @@ underlying L<WWW::Firecrawl>.
 
 =back
 
-Retry attributes (C<max_attempts>, C<retry_backoff>, C<retry_statuses>,
-C<on_retry>) and classification attributes (C<is_failure>, C<failure_codes>,
-C<strict>) live on the underlying L<WWW::Firecrawl>. Pass them to this
-constructor or build the L<WWW::Firecrawl> instance yourself and pass it as
-C<firecrawl>.
+The retry and classification attributes live on the underlying
+L<WWW::Firecrawl>. Pass them to this constructor, or build the
+L<WWW::Firecrawl> instance yourself and pass it as C<firecrawl>; both ways end
+in the same object, and mixing them croaks.
 
 =head1 ERROR HANDLING
 

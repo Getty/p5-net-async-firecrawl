@@ -88,9 +88,13 @@ $fc->agent(...)           $fc->credit_usage
 | `base_url` | `$ENV{FIRECRAWL_BASE_URL}` or cloud URL | Firecrawl server |
 | `api_key` | `$ENV{FIRECRAWL_API_KEY}` | Bearer token (optional for self-hosted) |
 | `poll_interval` | `3` | Seconds between status polls in flow helpers |
-| `max_attempts` | `3` | Retry attempts for transport/API errors |
-| `retry_backoff` | `[1, 2, 4]` | Seconds between retries |
-| `firecrawl` | auto | Pre-built `WWW::Firecrawl` instance |
+| `api_version` | sibling default | API version, forwarded to `WWW::Firecrawl` |
+| `max_attempts` | `3` | Retry attempts for transport/API errors (forwarded) |
+| `retry_backoff` | `[1, 2, 4]` | Seconds between retries (forwarded) |
+| `retry_statuses` | `[429, 502, 503, 504]` | HTTP statuses that are retried (forwarded) |
+| `on_retry` | none | Callback `($attempt, $delay, $error)` before each retry (forwarded) |
+| `is_failure`, `failure_codes`, `strict` | sibling default | Classification policy (forwarded) |
+| `firecrawl` | auto | Pre-built `WWW::Firecrawl` instance instead of the forwarded keys; combining both croaks |
 | `http` | auto | Pre-built `Net::Async::HTTP` instance |
 
 ## See Also
