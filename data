@@ -1,0 +1,43 @@
+---
+claimed_at: 2026-10-25T05:47:40Z
+claimed_by: worker
+class: standard
+completed: 2026-10-25T05:47:40Z
+created: 2026-10-21T02:16:31Z
+id: 1
+priority: high
+started: 2026-10-25T05:42:20Z
+status: done
+tags:
+- bug
+- api
+title: Der Konstruktor weist die im README dokumentierten Retry-Parameter zurück
+updated: 2026-10-25T05:47:40Z
+---
+
+README und POD führen max_attempts, retry_backoff (und die Klassifikations-Attribute
+is_failure, failure_codes, strict) als Konstruktor-Parameter von
+Net::Async::Firecrawl. Der Konstruktor nimmt sie nicht an:
+
+  Net::Async::Firecrawl->new(base_url => 'http://x', max_attempts => 5)
+  -> croak "Unknown configuration keys: max_attempts"
+
+configure_unknown streicht nur base_url, api_key, api_version, poll_interval, firecrawl,
+http und delay_sub — alles andere ist ein Fehler. Wer der Dokumentation folgt, bekommt
+also einen Croak statt eines Retries.
+
+Zwei Wege sind möglich: der Konstruktor reicht die Attribute an den
+WWW::Firecrawl-Aufbau weiter, oder die Doku beschreibt den Weg über firecrawl =>
+eigenes WWW::Firecrawl-Objekt. Was auch immer gewählt wird: README-Tabelle, POD und
+der Code müssen dasselbe sagen.
+
+Erledigt, wenn:
+
+- ein Test den dokumentierten Aufruf abdeckt (Konstruktor mit max_attempts oder das
+  firecrawl => ...-Objekt),
+- README und POD die tatsächlich unterstützten Wege beschreiben,
+- die bestehenden Tests weiterhin grün sind.
+
+Entscheidung: Konstruktor reicht die Attribute an WWW::Firecrawl weiter (README/POD versprachen das); firecrawl => plus diese Keys croakt statt still zu ignorieren. Commit 920483d
+
+Also found: Skill net-async-firecrawl-core und CLAUDE.md 'State of the code' sind nach diesem Auftrag veraltet (Konstruktor, no-id, LICENSE/CI, Testzahl).
