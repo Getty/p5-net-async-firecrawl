@@ -10,7 +10,8 @@
       "kanban-issues-karr-coordination@karr",
       "kanban-issues-karr-ticket@karr",
       "perl-io-async-future@getty",
-      "perl-release-dist-ini@getty"
+      "perl-release-dist-ini@getty",
+      "perl-firecrawl@www-firecrawl"
     ],
     "bundles": [
       "getty-cpan-dist@getty"
@@ -23,6 +24,10 @@
     },
     "karr": {
       "git": "https://github.com/Getty/karr.git",
+      "ref": "main"
+    },
+    "www-firecrawl": {
+      "git": "https://github.com/Getty/p5-www-firecrawl.git",
       "ref": "main"
     }
   },
