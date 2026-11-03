@@ -47,8 +47,7 @@ code goes back to the worker as a note on its card, not as your own fix. **Never
    internal refactor.
 
 4. **`LICENSE`** — committed, not generated at build time. `[@Author::GETTY]` checks
-   it against `license`, `copyright_holder` and `copyright_year` from `dist.ini` and
-   aborts the build when it is missing or no longer matches. After changing any of
+   it against `license`, `copyright_holder` and `copyright_year` from `dist.ini`. After changing any of
    those three settings, run `dzil genlicense` and `git add LICENSE` — the `git add`
    is not optional, the bundle gathers through `Git::GatherDir` and sees only tracked
    files.

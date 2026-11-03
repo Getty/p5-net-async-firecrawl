@@ -36,8 +36,8 @@ Work is coordinated on the repo's `karr` board (`karr board`).
 
 ## State of the code
 
-The flows work and the suite is green (`prove -lr t/`, five files, 23 tests) — but the
-suite needs `WWW::Firecrawl` installed; without it the tests only run with the sibling
-checkout on the include path. The distribution predates the current house structures:
-there is no `LICENSE` file, so `dzil build` aborts, and there is no CI. The known gaps
-are tracked on the internal board.
+The flows are covered by a scripted suite (`prove -lr t/`, seven files, no network);
+it needs `WWW::Firecrawl` installed, or the sibling checkout on the include path.
+`LICENSE`, `Changes`, `README.md`, `cpanfile` and the CI workflow
+(`.github/workflows/ci.yml`, pure-Perl test run on the house `dzil-test` action) are
+committed; the module carries `our $VERSION`, which the bundle maintains at release.

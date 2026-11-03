@@ -18,10 +18,12 @@ async plumbing (dispatch, polling, pagination walk, partial-success splitting).
 |---|---|
 | `lib/Net/Async/Firecrawl.pm` | everything: endpoints, flow helpers, retry, POD |
 | `t/00-load.t` | load check |
+| `t/05-constructor.t` | constructor keys, forwarding to the sibling, rejection of unknown keys |
 | `t/10-flows.t` | scrape, map, crawl_and_collect, batch, extract, error propagation, job failure |
 | `t/15-scrape-many.t` | concurrent scrape with partial success |
 | `t/20-retry.t` | retry, backoff, Retry-After, exhausted attempts |
 | `t/30-retry-failed-pages.t` | retry of the failed entries of a prior result |
+| `t/40-flow-edges.t` | flows that start without an id, `agent_and_wait`, job failure |
 | `ex/live_handyintelligence.pl` | live example against a self-hosted Firecrawl |
 
 ## The endpoint layer is generated, not written per endpoint
@@ -54,11 +56,10 @@ Everything else is rejected by `configure_unknown` with
 `Unknown configuration keys: …`.
 
 The retry attributes (`max_attempts`, `retry_backoff`, `retry_statuses`, `on_retry`)
-and the classification attributes (`is_failure`, `failure_codes`, `strict`) belong to
-the sibling instance, not to this constructor — the wrapper reads them from
-`$self->firecrawl`. To change them, build a `WWW::Firecrawl` yourself and pass it
-as `firecrawl`. The README's parameter table suggests otherwise; the code is the
-contract.
+and the classification attributes (`is_failure`, `failure_codes`, `strict`) are
+accepted too and forwarded to the sibling `WWW::Firecrawl->new`; the wrapper reads
+them from `$self->firecrawl`. Combined with a prebuilt `firecrawl` instance they
+croak — configure that instance itself.
 
 ## The Future contract
 
@@ -150,24 +151,21 @@ are the version-fragile point of this distribution.
 - `use Future::Utils qw( repeat )` — `Future::Utils` is a separate distribution and
   must be in the cpanfile. The poll loops do not work without it.
 - The sibling's private helpers (`_classify_response`, `_retry_delay`) are not API.
-- `configure_unknown` rejects every key the README's parameter table suggests — see
-  the constructor section.
-- `extract_and_wait` and `agent_and_wait` fail with a plain string when the started
-  job carries no id; the collect helpers build a proper `WWW::Firecrawl::Error`.
+- `configure_unknown` rejects every key outside the list in the constructor section.
+- All four flow helpers fail a job that starts without an id with a
+  `WWW::Firecrawl::Error` of type `api`.
 - `http` is built lazily and parented to the notifier; passing your own `http`
   instance skips that parenting and the `user_agent` from the sibling.
 - `poll_interval` is a read/write accessor for the instance default; the flow
   helpers take their own `poll_interval` argument, which wins.
-- `[@Author::GETTY]` aborts `dzil build` when no committed `LICENSE` exists.
+- `[@Author::GETTY]` checks the committed `LICENSE` against `dist.ini`.
 - `WWW::Firecrawl` is not installed in every checkout — the suite needs it on the
   include path (`prove -I…/p5-www-firecrawl/lib -lr t/`); that is a local
   environment fact, not a reason to install modules.
 
 ## Tests
 
-`prove -lr t/` — five files, 23 tests, no network: the tests replace `do_request`
-with a scripted table. Not covered: `configure_unknown`, the `do_request` guard, the
-"job returned no id" path, and `agent_and_wait`.
+`prove -lr t/` — no network: the tests replace `do_request` with a scripted table.
 
 ## Vocabulary
 
