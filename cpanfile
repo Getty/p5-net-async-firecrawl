@@ -9,6 +9,6 @@ on test => sub {
   requires 'Test::More', '0.98';
   requires 'Test::Fatal', '0.014';
   requires 'Test::LoadAllModules', '0.021';
-  requires 'HTTP::Response', '0';
-  requires 'JSON::MaybeXS', '0';
+  requires 'HTTP::Response';
+  requires 'JSON::MaybeXS';
 };
