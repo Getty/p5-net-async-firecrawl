@@ -2,14 +2,13 @@
 name: net-async-firecrawl-worker
 description: "Default Net-Async-Firecrawl worker — implement, refactor, debug and test the IO::Async client in lib/Net/Async/Firecrawl.pm. It wraps the request builders and parsers of WWW::Firecrawl into Future-returning methods and adds the flow helpers crawl_and_collect, batch_scrape_and_wait, extract_and_wait, agent_and_wait plus the concurrent scrape_many with partial-success splitting. Pre-loaded with the module's contracts and Getty's Perl conventions. Leaves a commit-ready tree; never commits — commits belong to net-async-firecrawl-release-manager."
 model: inherit
-briefing:
-  skills:
-    - net-async-firecrawl-core
-    - getty-perl-core
-    - getty-perl-pod
-    - perl-io-async-future
-    - perl-firecrawl
-    - kanban-issues-karr-ticket
+skills:
+  - net-async-firecrawl-core
+  - getty-perl-core
+  - getty-perl-pod
+  - perl-io-async-future
+  - perl-firecrawl
+  - kanban-issues-karr-ticket
 ---
 
 You are the net-async-firecrawl-worker for **Net-Async-Firecrawl**, a Perl

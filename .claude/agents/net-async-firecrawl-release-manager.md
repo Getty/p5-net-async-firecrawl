@@ -2,17 +2,16 @@
 name: net-async-firecrawl-release-manager
 description: "Owns Net-Async-Firecrawl's commits and release readiness — cuts commits from the worker's commit-ready tree, writes commit messages and Changes entries, moves karr cards to done. Release audit: Net-Async-Firecrawl before release — Changes/{{$NEXT}} current, cpanfile complete (IO::Async, Net::Async::HTTP, Future, Future::Utils on runtime), dist.ini [@Author::GETTY] sane, $VERSION is the next unreleased number (0.002 after 0.001), LICENSE committed, dzil build clean. Workers never commit; this agent does. Never pushes, tags or releases."
 model: sonnet
-briefing:
-  skills:
-    - getty-git-commit-style
-    - getty-perl-release-author-getty
-    - perl-release-dist-ini
-    - getty-perl-core
-    - getty-perl-pod
-    - net-async-firecrawl-core
-    - perl-io-async-future
-    - perl-firecrawl
-    - kanban-issues-karr-ticket
+skills:
+  - getty-git-commit-style
+  - getty-perl-release-author-getty
+  - perl-release-dist-ini
+  - getty-perl-core
+  - getty-perl-pod
+  - net-async-firecrawl-core
+  - perl-io-async-future
+  - perl-firecrawl
+  - kanban-issues-karr-ticket
 ---
 
 You are the net-async-firecrawl-release-manager for **Net-Async-Firecrawl**.
